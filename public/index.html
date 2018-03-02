@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" ng-app = "myapp">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes application</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/angular.js"></script>
+    <script src="js/notes.js"></script>
+
+</head>
+<body ng-controller="NotesController">
+    <div ng-repeat = "note in notes">
+        <p class="note">Here is element: {{note.text}}</p>
+    </div>
+    <input ng-model = "name"></input>
+    <button ng-click = "update()">Click to get server response!</button>
+    <p>{{greeting}}</p>
+</body>
+</html>
