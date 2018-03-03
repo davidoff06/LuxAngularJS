@@ -18,8 +18,6 @@ module.controller("NotesController", function($scope, $http) {
     };
     updateSections();
 
-    //$scope.addSection = function(){};
-
     var updateNotes = function () {
         console.log("updateNotes starts...");
         var params = {params:{section:$scope.activeSection}};
