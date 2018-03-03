@@ -1,5 +1,4 @@
-var module = angular.module("myapp",[]);
-
+var module = angular.module("myapp",['dndLists']);
 
 module.controller("NotesController", function($scope, $http) {
     $scope.notes = [];
@@ -33,6 +32,7 @@ module.controller("NotesController", function($scope, $http) {
     updateNotes();
 
     $scope.add = function() {
+        if (!$scope.text || $scope.text.length==0) return;
         var note = {text: $scope.text, section: $scope.activeSection};
         $http.post("/notes", note)
             .success(function() {
@@ -51,6 +51,23 @@ module.controller("NotesController", function($scope, $http) {
     $scope.showSection = function(section){
         $scope.activeSection = section.title;
         updateNotes();
+    };
+    $scope.addSection = function() {
+        console.log("addSection starts");
+        if($scope.newSection.length == 0) {return};
+        //check for duplicates
+        for (var i = 0;i < $scope.sections.length; i++) {
+            if ($scope.sections[i].title == $scope.newSection) {
+                return;
+            }
+        };
+        var newSection = {section: $scope.newSection};
+        $http.post("/sections/add", newSection)
+            .success(function() {
+                $scope.newSection = "";
+                console.log("addSection ends successfully");
+                updateSections();
+            });
     };
 
 });

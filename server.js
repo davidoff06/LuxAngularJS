@@ -64,9 +64,33 @@ app.delete("/notes", function(req, res){
 
 
 //temporary hardcoded as we don't have MongoDB part
-var sections = [{title:"Work"},{title:"Vacation"},{title:"Children"}];
+var sections = [
+    {id:0,title:"Work"},
+    {id:1,title:"Vacation"},
+    {id:2,title:"Children"}
+];
 
 app.get("/sections", function(req,res) {
     res.send(sections||[]);
+});
+
+app.post("/sections/add",function(req,res) {
+    console.log("adding new section");
+    if(req.body.length == 0){
+        console.log("req.body.length = 0. adding new section terminated,");
+        res.end();
+    }
+    var newTitle = req.body.section;
+    console.log(req);
+    var newId;
+    if(sections.length == 0) {
+        newId = 0;
+    } else {
+        newId = sections.length
+    };
+    var newSection = {id:newId, title: newTitle};
+    sections.push(newSection);
+    console.log(sections);
+    res.end();
 });
 
