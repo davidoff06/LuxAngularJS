@@ -1,28 +1,29 @@
-//lab3 js file
 var module = angular.module("myapp",[]);
 
-module.service ('updateNotes', function () {
-    //test service func
-    this.printName = function (text) {
-        console.log(text);
-    };
-
-});
 
 module.controller("NotesController", function($scope, $http) {
-    $scope.notes = [
-        {
-            text:'element1'
-        },
-        {
-            text:'element2'
-        }
-    ];
+    $scope.notes = [];
+    $scope.sections = [];
+    var updateNotes = function () {
+        $http.get("/notes")
+            .success(function(notes){
+                $scope.notes = notes;
+            })
+    };
+    updateNotes();
+
+    var updateSections = function () {
+        $http.get("/sections")
+            .success(function(sections){
+                $scope.sections = sections;
+            })
+    };
+    updateSections();
     // $scope.update = function(newText) {
     //     $scope.notes.push({text: newText});
     // };
-    $scope.update = function() {
-        console.log('update function starts...');
+    $scope.getName = function() {
+        console.log('getName function starts...');
         // console.log($scope.name);
         if ($scope.name) {
             $http.get("/greeting",
@@ -34,7 +35,23 @@ module.controller("NotesController", function($scope, $http) {
                     // console.log($scope.greeting);
                 });
         }
-    }
+    };
+    $scope.add = function() {
+        var note = {text: $scope.text};
+        $http.post("/notes", note)
+            .success(function() {
+                $scope.text = "";
+                updateNotes();
+            });
+    };
+    $scope.remove = function(rid){
+        console.log('remove function starts');
+        $http.delete("/notes", {params: {id:rid}})
+            .success(function() {
+                console.log("$http.delete works fine...");
+                updateNotes();
+            });
+    };
 
     //updateNotes.printName('Alex from service'); //test service
 });
