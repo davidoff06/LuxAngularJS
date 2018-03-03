@@ -70,25 +70,24 @@
 
         <div class="col-md-4">
         <!-- Sections -->
+            <div class="input-group" style="padding-bottom:20px">
+                <input type="text" class="form-control" placeholder="New section name" ng-model="newSection">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" ng-click="addSection()">Add</button>
+                </span>
+            </div><!--end of div input-group -->
             <ul class="list-group">
                 <li href="#" class="list-group-item"
-                    ng-repeat="section in sections">
-                    {{section.title}}</li>
+                    ng-repeat="section in sections"
+                    ng-click="showSection(section)"
+                    ng-class="{active: section.title==activeSection}">
+                    {{section.title}}
+                </li>
             </ul>
         </div>
     </div> <!-- end of row-->
 </div>
-    <!--<ul> To do:-->
-        <!--<li>4.2 - additional task</li>-->
-        <!--<li>p.8</li>-->
-        <!--<li>5-7 skip for now</li>-->
-    <!--</ul>-->
-    <!--<div ng-repeat = "note in notes">-->
-        <!--<p class="note">Here is element: {{note.text}} <button ng-click="remove(note.id)">Remove</button></p>-->
-    <!--</div>-->
-    <!--<br>-->
-    <!--<textarea rows="10" cols="50" ng-model="text"></textarea>-->
-    <!--<button ng-click = "add()">Add note</button>-->
+
 
 </body>
 </html>

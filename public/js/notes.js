@@ -4,40 +4,36 @@ var module = angular.module("myapp",[]);
 module.controller("NotesController", function($scope, $http) {
     $scope.notes = [];
     $scope.sections = [];
+    $scope.activeSection = null;
+
+    var updateSections = function () {
+        console.log("updateSections starts...");
+        $http.get("/sections")
+            .success(function(sections){
+                console.log("updateSections ends successfully...");
+                $scope.sections = sections;
+                if ($scope.activeSection == null && $scope.sections.length>0) {
+                    $scope.activeSection = $scope.sections[0].title;
+                }
+            });
+    };
+    updateSections();
+
+    //$scope.addSection = function(){};
+
     var updateNotes = function () {
-        $http.get("/notes")
+        console.log("updateNotes starts...");
+        var params = {params:{section:$scope.activeSection}};
+        $http.get("/notes",params)
             .success(function(notes){
+                console.log("updateNotes ends successfully.");
                 $scope.notes = notes;
             })
     };
     updateNotes();
 
-    var updateSections = function () {
-        $http.get("/sections")
-            .success(function(sections){
-                $scope.sections = sections;
-            })
-    };
-    updateSections();
-    // $scope.update = function(newText) {
-    //     $scope.notes.push({text: newText});
-    // };
-    $scope.getName = function() {
-        console.log('getName function starts...');
-        // console.log($scope.name);
-        if ($scope.name) {
-            $http.get("/greeting",
-                {params:
-                    {name: $scope.name}
-                })
-                .success(function(res) {
-                    $scope.greeting = res;
-                    // console.log($scope.greeting);
-                });
-        }
-    };
     $scope.add = function() {
-        var note = {text: $scope.text};
+        var note = {text: $scope.text, section: $scope.activeSection};
         $http.post("/notes", note)
             .success(function() {
                 $scope.text = "";
@@ -52,6 +48,9 @@ module.controller("NotesController", function($scope, $http) {
                 updateNotes();
             });
     };
+    $scope.showSection = function(section){
+        $scope.activeSection = section.title;
+        updateNotes();
+    };
 
-    //updateNotes.printName('Alex from service'); //test service
 });

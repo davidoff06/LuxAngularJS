@@ -20,9 +20,21 @@ app.use(session({
 
 
 app.get("/notes", function(req,res) {
-    res.send(req.session.notes||[]);
+
+    var section = req.query.section;
+    var notes = req.session.notes || [];
+    var notesForSection = [];
+    for(i=0; i < notes.length; i++) {
+        if(notes[i].section === section){
+            notesForSection.push(notes[i]);
+        }
+    };
+    res.send(notesForSection||[]);
 });
+
 app.post("/notes", function(req, res) {
+    //to add new note to session.notes
+    console.log("adding new note");
     if (!req.session.notes) {
         req.session.notes = [];
         req.session.last_note_id = 0;
@@ -31,10 +43,12 @@ app.post("/notes", function(req, res) {
     note.id = req.session.last_note_id;
     req.session.last_note_id++;
     req.session.notes.push(note);
+    console.log(req.session.notes);
     res.end();
 });
 
 app.delete("/notes", function(req, res){
+    console.log("Removing note...");
     var id = req.query.id;
     var notes = req.session.notes || [];
     var updateNotesList = [];
@@ -44,6 +58,7 @@ app.delete("/notes", function(req, res){
         }
     }
     req.session.notes = updateNotesList;
+    console.log(req.session.notes);
     res.end();
 });
 
