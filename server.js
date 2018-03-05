@@ -4,9 +4,9 @@ var path = require('path');
 app.use(express.static(path.join('public')));
 app.listen(3000);
 
-app.get("/greeting", function(req,res) {
-    res.send("Hello, "+req.query.name+"! I’m server!");
-});
+// app.get("/greeting", function(req,res) {
+//     res.send("Hello, "+req.query.name+"! I’m server!");
+// });
 
 var session = require('express-session');
 var bodyParser = require('body-parser');
@@ -17,11 +17,14 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+var fs = require('fs');
 
 
 app.get("/notes", function(req,res) {
-
-    var section = req.query.section; //for get - data in query
+    //to get notes for the section
+    //Section title comes from the request
+    console.log('get notes starts');
+    var section = req.query.section; //for get request - data is stored in query property
     var notes = req.session.notes || [];
     var notesForSection = [];
     for(i=0; i < notes.length; i++) {
@@ -34,6 +37,7 @@ app.get("/notes", function(req,res) {
 
 app.post("/notes", function(req, res) {
     //to add new note to session.notes
+    //note text comes from the request
     console.log("adding new note");
     if (!req.session.notes) {
         req.session.notes = [];
@@ -44,7 +48,13 @@ app.post("/notes", function(req, res) {
     req.session.last_note_id++;
     req.session.notes.push(note);
     console.log(req.session.notes);
-    res.end();
+    //write to file - in additional to writing to session
+    var noteText = JSON.stringify(note)+"\n";
+    fs.appendFile("public/routes/notes/notes.json",noteText,function(err){
+        if(err) console.log("error with writing to the file");
+        res.end();
+    });
+
 });
 
 app.delete("/notes", function(req, res){

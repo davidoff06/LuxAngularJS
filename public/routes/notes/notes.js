@@ -4,6 +4,7 @@ angular.module("myapp").controller("NotesController", function($scope, $http, $r
     $scope.sections = [];
     $scope.activeSection = $routeParams.section;
     console.log($routeParams.section);
+    console.log(notesService.getSmile());
     //$scope.activeSection = [];
 
     var updateSections = function () {
