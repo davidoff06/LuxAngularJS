@@ -60,7 +60,7 @@ module.controller("NotesController", function($scope, $http) {
             }
         };
         var newSection = {section: $scope.newSection};
-        $http.post("/sections/add", newSection)
+        $http.post("/sections", newSection)
             .success(function() {
                 $scope.newSection = "";
                 console.log("addSection ends successfully");

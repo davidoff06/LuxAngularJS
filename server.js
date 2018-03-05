@@ -74,7 +74,7 @@ app.get("/sections", function(req,res) {
     res.send(sections||[]);
 });
 
-app.post("/sections/add",function(req,res) {
+app.post("/sections",function(req,res) {
     console.log("adding new section");
     if(req.body.length == 0){
         console.log("req.body.length = 0. adding new section terminated,");
