@@ -6,8 +6,12 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/angular.js"></script>
+    <script src="js/angular-route.min.js"></script>
     <script src="js/angular-drag-and-drop-lists.js"></script>
-    <script src="js/notes.js"></script>
+    <script src="routes/routes.js"></script>
+    <script src="routes/notes/notes.js"></script>
+    <script src="routes/viewSection/viewSection.js"></script>
+
 </head>
 <body ng-controller="NotesController">
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -39,55 +43,9 @@
         </p>
     </div>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Add your note to {{activeSection}}</h3>
-                </div>
 
-                <div class="panel-body">
-                    <div class="form-group">
-                        <textarea style="min-width:100%;min-height:200px" class="form-control" ng-model="text"></textarea>
-                    </div>
-                    <button ng-click="add()" class="btn btn-primary">Post note</button>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">Notes</div>
-
-                <ul class="list-group" ng-repeat="note in notes">
-                    <li class="list-group-item">{{note.text}}
-                        <button ng-click="remove(note.id)">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div> <!--end of col-md-8-->
-
-        <div class="col-md-4">
-        <!-- Sections -->
-            <div class="input-group" style="padding-bottom:20px">
-                <input type="text" class="form-control" placeholder="New section name" ng-model="newSection">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" ng-click="addSection()">Add</button>
-                </span>
-            </div><!--end of div input-group -->
-            <ul class="list-group" dnd-list="sections">
-                <li href="#" class="list-group-item"
-                    dnd-draggable="section"
-                    dnd-moved="sections.splice($index, 1); writeSections();"
-                    ng-repeat="section in sections"
-                    ng-click="showSection(section)"
-                    ng-class="{active: section.title==activeSection}">
-                    {{section.title}}
-                </li>
-            </ul>
-        </div>
-    </div> <!-- end of row-->
+<div class = "container" ng-view>
+    <!--routing is used inside div-->
 </div>
 
 

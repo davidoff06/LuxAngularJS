@@ -21,7 +21,7 @@ app.use(session({
 
 app.get("/notes", function(req,res) {
 
-    var section = req.query.section;
+    var section = req.query.section; //for get - data in query
     var notes = req.session.notes || [];
     var notesForSection = [];
     for(i=0; i < notes.length; i++) {
@@ -80,7 +80,7 @@ app.post("/sections",function(req,res) {
         console.log("req.body.length = 0. adding new section terminated,");
         res.end();
     }
-    var newTitle = req.body.section;
+    var newTitle = req.body.section; //for post - data in body
     console.log(req);
     var newId;
     if(sections.length == 0) {
