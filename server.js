@@ -94,3 +94,8 @@ app.post("/sections",function(req,res) {
     res.end();
 });
 
+app.get("/checkUser", function(req,res) {
+    console.log('checking the user...');
+    res.send(req.query.user.length>2);
+});
+
