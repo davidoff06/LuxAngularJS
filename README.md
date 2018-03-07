@@ -11,7 +11,7 @@ Run command "npm install" in the project root folder.
 The projects includes several branches.
 
 Documentation:
-- MongoDB https://docs.mongodb.com/manual/tutorial/getting-started/
--AngularJS https://docs.angularjs.org
+- MongoDB https://docs.mongodb.com/manual/tutorial/getting-started/ Use Compas for UI database interface.
+- AngularJS https://docs.angularjs.org
 
 
