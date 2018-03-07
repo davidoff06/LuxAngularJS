@@ -1,15 +1,22 @@
 (function()
 {
-    var UserFormController = function($scope, $http)
+    //preferable way to define a controller
+    var UserFormController = function($scope, $http, $location)
     {
         $scope.user = {};
-        $scope.user.userName = '';
-        $scope.user.password = '';
-        $scope.user.password2 = '';
+        $scope.submitForm = function(){
+        $http.post("/users", $scope.user)
+            .success(function(data){
+                console.log(data);
+                console.log("user saved!");
+                $location.path("/");
+            });
+        };
     };
 
-    UserFormController.$inject = ['$scope','$http'];
+    UserFormController.$inject = ['$scope','$http','$location'];
     angular.module("myapp").controller("UserFormController",UserFormController);
+    //end of controller definition
 
     //directive is used for comparing password and repeat password
     angular.module("myapp").directive("matchTo", function() {

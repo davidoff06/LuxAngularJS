@@ -4,9 +4,33 @@ var path = require('path');
 app.use(express.static(path.join('public')));
 app.listen(3000);
 
-app.get("/greeting", function(req,res) {
-    res.send("Hello, "+req.query.name+"! I’m server!");
+
+//to use MongoDB need to have Server version installed
+// and run client: <mongo ddb server path\bin\mongod.exe> --dbpath <new folder path - to store the data>
+//more ingormation https://docs.mongodb.com/getting-started/shell/tutorial/install-mongodb-on-windows/
+//for UI Mongo - use MongoDB Compass
+
+//mongo db connection initialization
+var Db = require('mongodb').Db;
+var Server = require('mongodb').Server;
+//adding new DB . name tutor
+var db = new Db('tutor',
+    new Server("localhost", 27017, {safe: true},
+        {auto_reconnect: true}, {}));
+
+db.open(function(){
+    console.log("mongo db is opened!");
+    db.collection('notes', function(error, notes) {
+        if(error) return console.log(error);
+        db.notes = notes;
+    });
+    db.collection('users', function(error, users) {
+        if(error) return console.log(error);
+        db.users = users;
+    });
+    console.log("open function ends");
 });
+//end of db connection
 
 var session = require('express-session');
 var bodyParser = require('body-parser');
@@ -21,29 +45,18 @@ app.use(session({
 
 app.get("/notes", function(req,res) {
 
-    var section = req.query.section; //for get - data in query
-    var notes = req.session.notes || [];
-    var notesForSection = [];
-    for(i=0; i < notes.length; i++) {
-        if(notes[i].section === section){
-            notesForSection.push(notes[i]);
-        }
-    };
-    res.send(notesForSection||[]);
+    db.notes.find(req.query).toArray(function(err, items) {
+        res.send(items);
+    });
+
 });
 
 app.post("/notes", function(req, res) {
     //to add new note to session.notes
     console.log("adding new note");
-    if (!req.session.notes) {
-        req.session.notes = [];
-        req.session.last_note_id = 0;
-    }
     var note = req.body;
-    note.id = req.session.last_note_id;
-    req.session.last_note_id++;
-    req.session.notes.push(note);
-    console.log(req.session.notes);
+    db.notes.insert(note);//test mongo insert
+    console.log(note);
     res.end();
 });
 
@@ -95,7 +108,18 @@ app.post("/sections",function(req,res) {
 });
 
 app.get("/checkUser", function(req,res) {
-    console.log('checking the user...');
+    console.log("checkUser function");
     res.send(req.query.user.length>2);
 });
+
+app.post("/users", function(req, res) {
+    console.log("adding new user");
+    var user = req.body;
+    db.users.insert(user, function(resp){
+        req.session.userName = req.body.userName;
+        console.log("new user "+user+' succesfully added');
+        res.end();
+    });
+});
+
 
