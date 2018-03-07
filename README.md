@@ -8,4 +8,10 @@ To run the project:
 Run command "npm install" in the project root folder.
 3) Run command "node server.js" and go to "http://localhost:3000/#/" in your browser.
 
-The projects includes several branch. 
+The projects includes several branches.
+
+Documentation:
+- MongoDB https://docs.mongodb.com/manual/tutorial/getting-started/
+-AngularJS https://docs.angularjs.org
+
+
